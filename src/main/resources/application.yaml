@@ -1,0 +1,24 @@
+# 数据库连接配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/clothes_management?useSSL=false
+    username: root
+    password: root
+    druid:
+      max-active: 10
+# mybatis配置
+mybatis:
+  # 给实体类其别名
+  type-aliases-package: com.ccsu.clothesmanagement.domain
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名
+# 日志级别
+logging:
+  level:
+    com:
+      ccsu:
+        clothesmanagement:
+          mapper:
+            debug
