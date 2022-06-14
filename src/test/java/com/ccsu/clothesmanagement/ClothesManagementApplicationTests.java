@@ -8,17 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ClothesManagementApplicationTests {
-    @Autowired
-    private UserService userService;
 
-    @Test
-    void testLogin() {
-        User user = new User();
-        user.setUsername("admin");
-        user.setPassword("123456");
-
-        User login = userService.login(user);
-        System.out.println(login);
-    }
 
 }

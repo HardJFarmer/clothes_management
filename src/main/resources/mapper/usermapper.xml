@@ -8,6 +8,69 @@
         resultType="返回实体类对象，使用包.类名" -->
     <select id="login" parameterType="user"
             resultType="user">
-        select * from user where username=#{username} and password=#{password};
+        select * from user where username=#{username} and password=#{password} and user_status = 1;
+    </select>
+    <select id="getUserList" resultType="user">
+        select * from user
+    </select>
+
+    <!--    addUser(@Param("usernaem") String usernaem,@Param("password") String password);-->
+    <insert id="addUser" >
+        insert into user(username,password,user_status,is_admin) values (#{username},#{password},1,1)
+    </insert>
+
+    <!--    int deleteUser(int userid);-->
+    <update id="deleteUser">
+        update user set user_status=0 where user_id=#{userId}
+    </update>
+    <!--    <delete id="deleteUser">-->
+    <!--        delete from user where user_id=#{uaerId}-->
+    <!--    </delete>-->
+
+
+
+    <!--  int updateUserId(User user);  -->
+    <update id="updateUserById">
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null and username != ''" >
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''" >
+                password = #{password},
+            </if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <sql id="usercolum">
+        user_id,username,password,user_status,is_admin
+    </sql>
+
+    <!--    List<User> selectUserByUseridAndUsername(@Param("usernamme") String username,@Param("userid") int id);-->
+    <select id="selectUserByUseridAndUserNameAndUserStatus" resultType="user">
+        select <include refid="usercolum"></include>
+        from user
+        <where>
+            <if test="userid != null and userid != ''">
+                and user_id = #{userid}
+            </if>
+            <if test="username != null and username != ''">
+                and username like COnCAT('%',#{username},'%')
+            </if>
+            <if test="userStatus != null">
+                and user_status = #{userStatus}
+            </if>
+        </where>
+
+    </select>
+    <!--            <if test="user_id != null and user_id != ''">-->
+    <!--                user_id=#{userId}-->
+    <!--            </if>-->
+    <!--     where user_id=#{userId} or username like "%#{username}%" and user_status like "%#{userStatus}%"-->
+
+    <!--    User selectUserByID(@Param("userId") int userId);-->
+    <select id="selectUserById" resultType="user">
+        select <include refid="usercolum"></include> from user where user_id=#{userId}
     </select>
 </mapper>

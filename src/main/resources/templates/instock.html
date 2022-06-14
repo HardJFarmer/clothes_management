@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>服装出入库管理系统</title>
+
+    <!--common-->
+    <div th:include="common :: commonheader"/>
+</head>
+
+<body class="sticky-header">
+
+    <!-- 货品修改的模态框 -->
+    <div class="modal fade" id="cargoUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">货品信息修改</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="updateCargoForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品编号</label>
+                            <div class="col-sm-10">
+                                <input name="cargoNumber" type="text" class="form-control" id="cargo_update_static"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品名</label>
+                            <div class="col-sm-10">
+                                <input name="cargoId" type="hidden" class="form-control" id="cargoId_update">
+                                <input type="text" name="cargoName" class="form-control" id="cargoName_update"
+                                       placeholder="货品名">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品颜色</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="cargoColor" class="form-control" id="cargoColor_update"
+                                       placeholder="货品颜色">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品尺寸</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="cargoSize" class="form-control" id="cargoSize_update"
+                                       placeholder="货品尺寸">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="cargo_update_btn">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 货品添加的模态框 -->
+    <div class="modal fade" id="cargoAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户添加</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="addCargoForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="cargoName" class="form-control" id="cargoName_add"
+                                       placeholder="货品名">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品颜色</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="cargoColor" class="form-control" id="cargoColor_add"
+                                       placeholder="货品颜色">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">货品尺寸</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="cargoSize" class="form-control" id="cargoSize_add"
+                                       placeholder="货品尺寸">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="cargo_save_btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <!-- 密码修改的模态框 -->
+        <div th:replace="common :: #passwordModifyModal"></div>
+        <!-- left side start-->
+        <div th:replace="common :: #leftmenu"></div>
+        <!-- left side end-->
+
+        <!-- main content start-->
+        <div class="main-content">
+
+            <!-- header section start-->
+            <div th:replace="common :: headermenu"></div>
+            <!-- header section end-->
+
+            <!-- page heading start-->
+            <div class="page-heading">
+                <h3>
+                    货品管理
+                </h3>
+            </div>
+            <!-- page heading end-->
+
+            <!--body wrapper start-->
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel">
+                            <header class="panel-heading">
+                                货品管理
+                            </header>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin-bottom: 20px; text-align: center;">
+                                        <form class="form-inline" id="search_form">
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_cargo_number">cargoNumber</label>
+                                                <input type="text" class="form-control" id="search_cargo_number"
+                                                       name="cargoNumber"
+                                                       placeholder="货品编号">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_cargo_name">Search CargoName</label>
+                                                <input class="form-control" id="search_cargo_name" name="cargoName"
+                                                       placeholder="货品名">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_cargo_color">Search
+                                                    CargoColor</label>
+                                                <input class="form-control" id="search_cargo_color" name="cargoColor"
+                                                       placeholder="货品颜色">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_cargo_size">Search CargoSize</label>
+                                                <input class="form-control" id="search_cargo_size" name="cargoSize"
+                                                       placeholder="货品尺寸">
+                                            </div>
+                                            <button type="button" class="btn btn-default" id="search_btn">条件查询</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px; text-align: center;">
+                                        <button type="button" class="btn btn-info" id="add_cargo_btn">添加货品</button>
+                                        <button type="button" class="btn btn-danger" id="del_all_btn">删除所选</button>
+                                    </div>
+                                </div>
+
+                                <div class="adv-table">
+                                    <table class="display table table-bordered table-striped" id="cargo_table">
+                                        <thead>
+                                            <tr>
+                                                <th><input type='checkbox' id="check_all"/></th>
+                                                <th>id</th>
+                                                <th>货品编号</th>
+                                                <th>货品名</th>
+                                                <th>货品颜色</th>
+                                                <th>货品尺寸</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <!--表格数据-->
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div class="row-fluid">
+                                        <div class="col-md-6">
+                                            <!--分页文字信息-->
+                                            <div class="dataTables_info" id="page_info_area">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!--分页条信息-->
+                                            <div class="dataTables_paginate paging_bootstrap pagination"
+                                                 id="page_nav_area">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!--body wrapper end-->
+            </div>
+            <!-- main content end-->
+        </div>
+    </section>
+    <div th:replace="common :: #commonscript"></div>
+    <script type="text/javascript" language="javascript"
+            th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+    <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{/js/my/instock.js}"></script>
+</body>
+</html>

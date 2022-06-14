@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>服装出入库管理系统</title>
+
+    <!--common-->
+    <div th:include="common :: commonheader"/>
+</head>
+
+<body class="sticky-header">
+
+    <section>
+        <!-- 密码修改的模态框 -->
+        <div th:replace="common :: #passwordModifyModal"></div>
+        <!-- left side start-->
+        <div th:replace="common :: #leftmenu"></div>
+        <!-- left side end-->
+
+        <!-- main content start-->
+        <div class="main-content">
+
+            <!-- header section start-->
+            <div th:replace="common :: headermenu"></div>
+            <!-- header section end-->
+
+            <!-- page heading start-->
+            <div class="page-heading">
+                <h3>
+                    查看库存
+                </h3>
+            </div>
+            <!-- page heading end-->
+
+            <!--body wrapper start-->
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel">
+                            <header class="panel-heading">
+
+                            </header>
+                            <div class="panel-body">
+                                <div class="adv-table">
+                                    <table class="display table table-bordered table-striped" id="stock_table">
+                                        <thead>
+                                            <tr>
+                                                <th>仓库编号</th>
+                                                <th>仓库名称</th>
+                                                <th>库存数量</th>
+                                            </tr>
+                                        </thead>
+                                        <!--表格数据-->
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div class="row-fluid">
+                                        <div class="col-md-6">
+                                            <!--分页文字信息-->
+                                            <div class="dataTables_info" id="page_info_area">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!--分页条信息-->
+                                            <div class="dataTables_paginate paging_bootstrap pagination"
+                                                 id="page_nav_area">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!--body wrapper end-->
+            </div>
+            <!-- main content end-->
+        </div>
+    </section>
+    <!--方便前端js获取到id-->
+    <input type="hidden" th:value="${cargoId}" id="cargoId"/>
+
+    <div th:replace="common :: #commonscript"></div>
+    <script type="text/javascript" language="javascript"
+            th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+    <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{/js/my/cargoStock.js}"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>服装出入库管理系统</title>
+
+    <!--common-->
+    <div th:include="common :: commonheader"/>
+</head>
+
+<body class="sticky-header">
+
+    <!-- 用户修改的模态框 -->
+    <div class="modal fade" id="userUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">用户修改</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="updateUserForm">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">userId</label>
+                            <div class="col-sm-10">
+                                <input name="userId" type="text" class="form-control" id="userId_update_static"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">userName</label>
+                            <div class="col-sm-10">
+                                <input name="userId" type="hidden" class="form-control" id="userId_update">
+                                <input type="text" name="username" class="form-control" id="userName_update_input"
+                                       placeholder="用户名">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="user_update_btn">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户添加的模态框 -->
+    <div class="modal fade" id="userAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户添加</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">empName</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="username" class="form-control" id="username_add_input"
+                                       placeholder="用户名">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="user_save_btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <!-- 密码修改的模态框 -->
+        <div th:replace="common :: #passwordModifyModal"></div>
+        <!-- left side start-->
+        <div th:replace="common :: #leftmenu"></div>
+        <!-- left side end-->
+
+        <!-- main content start-->
+        <div class="main-content">
+
+            <!-- header section start-->
+            <div th:replace="common :: headermenu"></div>
+            <!-- header section end-->
+
+            <!-- page heading start-->
+            <div class="page-heading">
+                <h3>
+                    用户管理
+                </h3>
+            </div>
+            <!-- page heading end-->
+
+            <!--body wrapper start-->
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel">
+                            <header class="panel-heading">
+                                用户管理
+                            </header>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin-bottom: 20px; text-align: center;">
+                                        <form class="form-inline" id="search_form">
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_user_id">User Id</label>
+                                                <input type="text" class="form-control" id="search_user_id"
+                                                       name="userId"
+                                                       placeholder="用户id">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_username">Search Username</label>
+                                                <input class="form-control" id="search_username" name="username"
+                                                       placeholder="用户名">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="search_user_status">用户是否离职</label>
+                                                <select class="form-control" id="search_user_status" name="userStatus">
+                                                    <option value="">所有状态</option>
+                                                    <option value="1">在职</option>
+                                                    <option value="0">离职</option>
+                                                </select>
+                                            </div>
+                                            <button type="button" class="btn btn-default" id="search_btn">条件查询</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px; text-align: center;">
+                                        <button type="button" class="btn btn-info" id="add_user_btn">添加用户</button>
+                                    </div>
+                                </div>
+
+                                <div class="adv-table">
+                                    <table class="display table table-bordered table-striped" id="user_table">
+                                        <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>用户名</th>
+                                                <th>用户状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <!--表格数据-->
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div class="row-fluid">
+                                        <div class="col-md-6">
+                                            <!--分页文字信息-->
+                                            <div class="dataTables_info" id="page_info_area">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!--分页条信息-->
+                                            <div class="dataTables_paginate paging_bootstrap pagination"
+                                                 id="page_nav_area">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!--body wrapper end-->
+            </div>
+            <!-- main content end-->
+        </div>
+    </section>
+    <div th:replace="common :: #commonscript"></div>
+    <script type="text/javascript" language="javascript"
+            th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+    <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{/js/my/usermanage.js}"></script>
+</body>
+</html>

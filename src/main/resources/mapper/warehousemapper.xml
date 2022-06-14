@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper为映射的根节点，namespace指定Dao接口的完整类名 -->
+<mapper namespace="com.ccsu.clothesmanagement.mapper.WareHouseMapper">
+
+    <!--批量逻辑删除-->
+    <update id="delWarehouseByList" parameterType="list">
+        update warehouse set warehouse_status = 0 where warehouse_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--     List<WareHouse> selectWareHouseByCondition(WareHouse wareHouse);-->
+    <select id="selectWareHouseByCondition" resultType="WareHouse">
+        select * from warehouse
+        <where>
+            warehouse_status=1
+            <if test="warehouseId != null and warehouseId !=''">
+               and warehouse_id=#{warehouseId}
+            </if>
+            <if test="warehouseName != null and warehouseName !=''">
+               and warehouse_name like CONCAT("%",#{warehouseName},"%")
+            </if>
+        </where>
+    </select>
+
+<!--    int addWareHouse(WareHouse wareHouse);-->
+    <insert id="addWareHouse">
+        insert into warehouse(warehouse_name,warehouse_status)
+        values(#{warehouseName},1)
+    </insert>
+
+<!--    int deleteWareHouse(WareHouse wareHouse);-->
+    <update id="deleteWareHouse">
+        update warehouse set warehouse_status = 0 where warehouse_id = #{warehouseId}
+    </update>
+
+<!--    int updateWarHouse(WareHouse wareHouse);-->
+    <update id="updateWarHouse">
+        update warehouse
+        <trim prefix="set" suffixOverrides=",">
+            <if test="warehouseName != null and warehouseName != ''" >
+                warehouse_name = #{warehouseName},
+            </if>
+        </trim>
+        where warehouse_id = #{warehouseId}
+    </update>
+
+<!--     List<WareHouse> selectCargoAndWareHouseByStepOne(@Param("warehouseId") Integer warehouseId);-->
+<!--    <resultMap id="CargoAndWareHouseByStepOneResultMap" type="WareHouse">-->
+<!--        <id property="cargoId" column="cargo_id"></id>-->
+<!--        <result property="account" column="account"></result>-->
+<!--        <collection property="cargoList"-->
+<!--                    select="com.ccsu.clothesmanagement.mapper.CargoMapper.selectCargoAndWareHouseByStepTwo"-->
+<!--                    column="cargo_id"></collection>-->
+<!--    </resultMap>-->
+<!--   <select id="selectCargoAndWareHouseByStepOne" resultMap="CargoAndWareHouseByStepOneResultMap">-->
+<!--       select * from cargoandwarehouse where warehouse_id=#{warehouseId}-->
+<!--   </select>-->
+
+    <resultMap id="CargoAndWareHouseByStepOneResultMap" type="wareHouse">
+        <id property="warehouseId" column="warehouse_id"/>
+        <result property="warehouseName" column="warehouse_name"/>
+        <result property="warehouseStatus" column="warehouse_status"/>
+        <collection property="cargoList" ofType="cargo">
+            <id property="cargoId" column="cargo_id"/>
+            <result property="cargoNumber" column="cargo_number"/>
+            <result property="cargoName" column="cargo_name"/>
+            <result property="cargoStatus" column="cargo_status"/>
+            <result property="cargoColor" column="cargo_color"/>
+            <result property="cargoSize" column="cargo_size"/>
+            <result property="account" column="account"/>
+        </collection>
+    </resultMap>
+    <select id="selectCargoAndWareHouseByStepOne" resultMap="CargoAndWareHouseByStepOneResultMap">
+        SELECT
+            c.cargo_id,c.cargo_number,c.cargo_name,c.cargo_status,c.cargo_color,
+            c.cargo_size,w.warehouse_id,w.warehouse_name,caw.account,w.warehouse_status
+        FROM
+            cargoandwarehouse caw,
+            warehouse w,
+            cargo c
+        WHERE
+            caw.warehouse_id = #{warehouseId}
+          AND caw.warehouse_id = w.warehouse_id
+          AND c.cargo_id = caw.cargo_id
+    </select>
+</mapper>
