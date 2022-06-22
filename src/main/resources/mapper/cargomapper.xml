@@ -6,7 +6,8 @@
 <mapper namespace="com.ccsu.clothesmanagement.mapper.CargoMapper">
     <!-- id="接口中的方法名" parameterType="传入的参数类型"
         resultType="返回实体类对象，使用包.类名" -->
-    <sql id="cargocloum">cargo_id,cargo_number,cargo_name,cargo_status,cargo_color,cargo_size</sql>
+    <sql id="cargocloum">cargo_id
+    ,cargo_number,cargo_name,cargo_status,cargo_color,cargo_size</sql>
 
     <!--批量逻辑删除-->
     <update id="delCargoByList" parameterType="list">
@@ -18,50 +19,55 @@
 
     <!--    List<Cargo> getAllCargo();-->
     <select id="getAllCargo" resultType="cargo">
-        select <include refid="cargocloum"></include>
+        select
+        <include refid="cargocloum"></include>
         from cargo
     </select>
 
-<!--    int AddCargo();-->
+    <!--    int AddCargo();-->
     <insert id="AddCargo">
-        insert into cargo(cargo_number,cargo_name,cargo_status,cargo_color,cargo_size)
-        values(#{cargoNumber},#{cargoName},#{cargoStatus},#{cargoColor},#{cargoSize})
+        insert into cargo(cargo_number, cargo_name, cargo_status, cargo_color, cargo_size)
+        values (#{cargoNumber}, #{cargoName}, #{cargoStatus}, #{cargoColor}, #{cargoSize})
     </insert>
 
-<!--int DeletaCargoById(@Param("cargoId") Integer cargoId);-->
+    <!--int DeletaCargoById(@Param("cargoId") Integer cargoId);-->
     <update id="DeletaCargoById">
-        update cargo set cargo_status=0 where cargo_id=#{cargoId}
-    </update>
-
-<!--    int DeletaCargoByNumber(@Param("cargoNumber") String cargoNumber);-->
-    <update id="DeletaCargoByNumber">
-        update cargo set cargo_status=0 where cargo_number=#{cargoNumber}
-    </update>
-
-<!--    int UpdateCargo(Cargo cargo);-->
-    <update id="UpdateCargo">
         update cargo
-    <trim prefix="set" suffixOverrides=",">
-            <if test="cargoNumber != null and cargoNumber != ''" >
-                cargo_number = #{cargoNumber},
-            </if>
-            <if test="cargoName != null and cargoName != ''" >
-                cargo_name = #{cargoName},
-            </if>
-            <if test="cargoColor != null and cargoColor != ''" >
-                cargo_color = #{cargoColor},
-            </if>
-            <if test="cargoSize != null and cargoSize != ''" >
-                cargo_size = #{cargoSize},
-            </if>
-    </trim>
+        set cargo_status=0
         where cargo_id = #{cargoId}
     </update>
-    
-<!--    List<Cargo> getCargoByidAndNumberAndNameAndStatus(@Param("cargoId") Integer cargoId,
-                                             @Param("cargoNumber") String cargoNumber,
-                                             @Param("cargoName") String cargoName,
-                                             @Param("cargoStatus") String cargoStatus);-->
+
+    <!--    int DeletaCargoByNumber(@Param("cargoNumber") String cargoNumber);-->
+    <update id="DeletaCargoByNumber">
+        update cargo
+        set cargo_status=0
+        where cargo_number = #{cargoNumber}
+    </update>
+
+    <!--    int UpdateCargo(Cargo cargo);-->
+    <update id="UpdateCargo">
+        update cargo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="cargoNumber != null and cargoNumber != ''">
+                cargo_number = #{cargoNumber},
+            </if>
+            <if test="cargoName != null and cargoName != ''">
+                cargo_name = #{cargoName},
+            </if>
+            <if test="cargoColor != null and cargoColor != ''">
+                cargo_color = #{cargoColor},
+            </if>
+            <if test="cargoSize != null and cargoSize != ''">
+                cargo_size = #{cargoSize},
+            </if>
+        </trim>
+        where cargo_id = #{cargoId}
+    </update>
+
+    <!--    List<Cargo> getCargoByidAndNumberAndNameAndStatus(@Param("cargoId") Integer cargoId,
+                                                 @Param("cargoNumber") String cargoNumber,
+                                                 @Param("cargoName") String cargoName,
+                                                 @Param("cargoStatus") String cargoStatus);-->
     <select id="getCargoByCargo" resultType="cargo">
         select <include refid="cargocloum"></include> from cargo
         <where>
@@ -71,13 +77,13 @@
             <if test="cargoNumber != null and cargoNumber != ''">
                 and cargo_number like CONCAT("%",#{cargoNumber},"%")
             </if>
-            <if test="cargoName != null and cargoName != ''" >
+            <if test="cargoName != null and cargoName != ''">
                 and cargo_name like CONCAT("%",#{cargoName},"%")
             </if>
-            <if test="cargoColor != null and cargoColor != ''" >
+            <if test="cargoColor != null and cargoColor != ''">
                 and cargo_color like CONCAT("%",#{cargoColor},"%")
             </if>
-            <if test="cargoSize != null and cargoSize != ''" >
+            <if test="cargoSize != null and cargoSize != ''">
                 and cargo_size = #{cargoSize}
             </if>
             <if test="cargoStatus != null">
@@ -86,24 +92,26 @@
         </where>
     </select>
 
-<!--    CargoAndWareHouse selectCargoAndWareHouseByStepTwo(@Param("cargoId") Integer cargoId);-->
+    <!--    CargoAndWareHouse selectCargoAndWareHouseByStepTwo(@Param("cargoId") Integer cargoId);-->
     <select id="selectCargoAndWareHouseByStepTwo" resultType="Cargo">
-        select * from cargo where cargo_id=#{cargoId}
+        select *
+        from cargo
+        where cargo_id = #{cargoId}
     </select>
 
-<!--    List<Cargo> selectCargoAndWareHouseByid(Cargo cargo);-->
-<!--    <resultMap id="selectCargoAndWareHouse" type="Cargo">-->
-<!--        <id property="cargoId" column="cargo_id"></id>-->
-<!--        <result property="account" column="account"></result>-->
-<!--        <collection property="wareHouseList" ofType="WareHouse">-->
-<!--            <id property="warehouseId" column="warehouse_id"></id>-->
-<!--            <result property="warehouseName" column="warehouse_name"></result>-->
-<!--        </collection>-->
-<!--    </resultMap>-->
-<!--    <select id="selectCargoAndWareHouseByid" resultMap="selectCargoAndWareHouse">-->
-<!--        select * from cargoandwarehouse,warehouse where cargoandwarehouse.cargo_id=#{cargoId}-->
-<!--                                                          and cargoandwarehouse.warehouse_id=warehouse.warehouse_id-->
-<!--    </select>-->
+    <!--    List<Cargo> selectCargoAndWareHouseByid(Cargo cargo);-->
+    <!--    <resultMap id="selectCargoAndWareHouse" type="Cargo">-->
+    <!--        <id property="cargoId" column="cargo_id"></id>-->
+    <!--        <result property="account" column="account"></result>-->
+    <!--        <collection property="wareHouseList" ofType="WareHouse">-->
+    <!--            <id property="warehouseId" column="warehouse_id"></id>-->
+    <!--            <result property="warehouseName" column="warehouse_name"></result>-->
+    <!--        </collection>-->
+    <!--    </resultMap>-->
+    <!--    <select id="selectCargoAndWareHouseByid" resultMap="selectCargoAndWareHouse">-->
+    <!--        select * from cargoandwarehouse,warehouse where cargoandwarehouse.cargo_id=#{cargoId}-->
+    <!--                                                          and cargoandwarehouse.warehouse_id=warehouse.warehouse_id-->
+    <!--    </select>-->
 
     <resultMap id="selectCargoAndWareHouse" type="Cargo">
         <id property="cargoId" column="cargo_id"/>
@@ -120,17 +128,45 @@
         </collection>
     </resultMap>
     <select id="selectCargoAndWareHouseByid" resultMap="selectCargoAndWareHouse">
-        SELECT
-            c.cargo_id,c.cargo_number,c.cargo_name,c.cargo_status,c.cargo_color,
-               c.cargo_size,w.warehouse_id,w.warehouse_name,caw.account,w.warehouse_status
-        FROM
-            cargoandwarehouse caw,
-            warehouse w,
-            cargo c
-        WHERE
-            caw.cargo_id = #{cargoId}
+        SELECT c.cargo_id,
+               c.cargo_number,
+               c.cargo_name,
+               c.cargo_status,
+               c.cargo_color,
+               c.cargo_size,
+               w.warehouse_id,
+               w.warehouse_name,
+               caw.account,
+               w.warehouse_status
+        FROM cargoandwarehouse caw,
+             warehouse w,
+             cargo c
+        WHERE caw.cargo_id = #{cargoId}
           AND caw.warehouse_id = w.warehouse_id
           AND c.cargo_id = caw.cargo_id
+          AND caw.account &gt; 0
     </select>
 
+    <!--    int selectAccountByCargiIdAndWareHouseId(CargoAndWareHouse cargoAndWareHouse);-->
+    <select id="selectAccountByCargiIdAndWareHouseId" resultType="CargoAndWareHouse">
+        select account
+        from cargoandwarehouse
+        where cargo_id = #{cargoId}
+          and warehouse_id = #{warehouseId}
+          and account >= 0
+    </select>
+
+    <!--    int updateAccountByCargiIdAndWareHouseId(@Param("cargoId")int cargoId,@Param("warehouseId")int warehouseId);-->
+    <update id="updateAccountByCargiIdAndWareHouseId">
+        update cargoandwarehouse
+        set account=#{account}
+        where cargo_id = #{cargoId}
+          and warehouse_id = #{warehouseId}
+    </update>
+
+    <!--如果货品和仓库中间表之间不存在该货品的纪录，则入库的时候需要插入一条库存纪录-->
+    <insert id="addCargoStock" parameterType="cargoAndWareHouse">
+        insert into cargoandwarehouse(cargo_id, warehouse_id, account)
+        values (#{cargoId}, #{warehouseId}, #{account});
+    </insert>
 </mapper>

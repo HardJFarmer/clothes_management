@@ -25,13 +25,13 @@ public class UserController {
         return "/user";
     }
 
-    // @GetMapping("/user")
-    // @ResponseBody
-    // public Result getUserList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-    //                           @RequestParam(value = "pageSize", required = false, defaultValue = "8") Integer pageSize) {
-    //     PageInfo<User> userList = userService.getUserList(pageNum, pageSize);
-    //     return Result.success().add("users", userList);
-    // }
+    @GetMapping("/user")
+    @ResponseBody
+    public Result getUserList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                              @RequestParam(value = "pageSize", required = false, defaultValue = "8") Integer pageSize) {
+        PageInfo<User> userList = userService.getUserList(pageNum, pageSize);
+        return Result.success().add("users", userList);
+    }
 
     @PostMapping("/adduser")
     @ResponseBody
@@ -47,10 +47,10 @@ public class UserController {
         return Result.success();
     }
 
-    @GetMapping("/updateuser")
+    @DeleteMapping("/updateuser/{id}")
     @ResponseBody
-    public Result deleteUser(User user){
-        userService.deleteUser(user.getUserId());
+    public Result deleteUser(@PathVariable Integer id){
+        userService.deleteUser(id);
         return Result.success();
     }
 

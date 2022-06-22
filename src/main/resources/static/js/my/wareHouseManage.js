@@ -98,10 +98,10 @@ function build_page_nav(result) {
     } else {
         //为元素添加点击翻页的事件
         firstPageLi.click(function () {
-            show_cargo(1);
+            show_wareHouse(1);
         });
         prePageLi.click(function () {
-            show_cargo(result.extend.warehouses.pageNum - 1);
+            show_wareHouse(result.extend.warehouses.pageNum - 1);
         });
     }
 
@@ -118,10 +118,10 @@ function build_page_nav(result) {
         lastPageLi.addClass("disabled");
     } else {
         nextPageLi.click(function () {
-            show_cargo(result.extend.warehouses.pageNum + 1);
+            show_wareHouse(result.extend.warehouses.pageNum + 1);
         });
         lastPageLi.click(function () {
-            show_cargo(result.extend.warehouses.pages);
+            show_wareHouse(result.extend.warehouses.pages);
         });
     }
 
@@ -136,7 +136,7 @@ function build_page_nav(result) {
             numLi.addClass("active");
         }
         numLi.click(function () {
-            show_cargo(item);
+            show_wareHouse(item);
         });
         ul.append(numLi);
     });
@@ -182,7 +182,7 @@ $(document).on("click", "#cargo_update_btn", function () {
                     //关闭对话框
                     $("#cargoUpdateModal").modal("hide");
                     //回到当前页面
-                    show_cargo(currentPage);
+                    show_wareHouse(currentPage);
                 }
             });
         }else {

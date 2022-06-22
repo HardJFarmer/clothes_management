@@ -2,8 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="commonheader">
     <!--common-->
-    <link href="css/style.css" th:href="@{/css/style.css}" rel="stylesheet">
-    <link href="css/style-responsive.css" th:href="@{/css/style-responsive.css}" rel="stylesheet">
+    <link  th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}">
 
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -94,10 +95,19 @@
                 <li th:class="${#httpServletRequest.requestURI == '/wareHouse.html'?'active' : ''}"><a th:href="@{/wareHouse.html}">
                     <i class="fa fa-th-list"></i><span>仓库管理</span></a>
                 </li>
-                <li class="menu-list"><a href="#"><i class="fa fa-th-list"></i> <span>出入库管理</span></a>
+                <li th:class="'menu-list ' + ${#httpServletRequest.requestURI == '/instock.html' || #httpServletRequest.requestURI == '/outstock.html'?'nav-active' : ''}">
+                    <a href="#">
+                        <i class="fa fa-th-list">
+                        </i>
+                        <span>出入库管理</span>
+                    </a>
                     <ul class="sub-menu-list">
-                        <li><a href="responsive_table.html"> 入库管理</a></li>
-                        <li><a href="editable_table.html"> 出库管理</a></li>
+                        <li th:class="${#httpServletRequest.requestURI == '/instock.html'?'active' : ''}">
+                            <a th:href="@{/instock.html}"> 入库管理</a>
+                        </li>
+                        <li th:class="${#httpServletRequest.requestURI == '/outstock.html'?'active' : ''}">
+                            <a th:href="@{/outstock.html}"> 出库管理</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

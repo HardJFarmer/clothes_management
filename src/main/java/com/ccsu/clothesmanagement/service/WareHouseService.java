@@ -33,5 +33,18 @@ public interface WareHouseService {
      */
     PageInfo<WareHouse> selectCargoAndWareHouseByStepOne(int pageNum,int pageSize,WareHouse wareHouse);
 
+    /**
+     * 集合逻辑删除
+     * @param ids
+     * @return
+     */
     int delCargoByList(List<Integer> ids);
+
+    /**
+     * 不分页查询所有仓库
+     * @return
+     */
+    List<WareHouse> selectWareHouses();
+
+    List<WareHouse> selectWarehouseCargo(WareHouse wareHouse);
 }

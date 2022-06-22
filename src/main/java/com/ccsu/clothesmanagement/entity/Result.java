@@ -1,10 +1,13 @@
 package com.ccsu.clothesmanagement.entity;
+import lombok.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 用于向页面传递信息的类
  */
+@Data
 public class Result {
 	//状态码100成功， 200失败
 	private int code;
@@ -36,29 +39,5 @@ public class Result {
 	public Result remove(String key){
 		this.extend.remove(key);
 		return this;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public Map<String, Object> getExtend() {
-		return extend;
-	}
-
-	public void setExtend(Map<String, Object> extend) {
-		this.extend = extend;
 	}
 }

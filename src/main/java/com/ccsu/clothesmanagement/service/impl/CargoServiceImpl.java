@@ -1,7 +1,9 @@
 package com.ccsu.clothesmanagement.service.impl;
 
 import com.ccsu.clothesmanagement.domain.Cargo;
+import com.ccsu.clothesmanagement.domain.CargoAndWareHouse;
 import com.ccsu.clothesmanagement.domain.User;
+import com.ccsu.clothesmanagement.domain.WareHouse;
 import com.ccsu.clothesmanagement.entity.Result;
 import com.ccsu.clothesmanagement.mapper.CargoMapper;
 import com.ccsu.clothesmanagement.service.CargoService;
@@ -11,6 +13,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,18 +23,12 @@ public class CargoServiceImpl implements CargoService {
     @Autowired
     private CargoMapper cargoMapper;
 
-    @Override
-    public PageInfo<Cargo> getAllCargo(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        PageInfo<Cargo> pageInfo = new PageInfo<>(cargoMapper.getAllCargo());
-        return pageInfo;
-    }
 
     @Override
     public int AddCargo(Cargo cargo) {
         //添加后默认状态为1
         cargo.setCargoStatus(1);
-        cargo.setCargoNumber(UUID.randomUUID().toString().substring(0, 8));
+        cargo.setCargoNumber(this.getNumber());
         int row = cargoMapper.AddCargo(cargo);
         return row;
     }
@@ -73,5 +71,25 @@ public class CargoServiceImpl implements CargoService {
         int row = cargoMapper.delCargoByList(idList);
         return row;
     }
+
+    @Override
+    public CargoAndWareHouse selectAccount(Integer cargoId, Integer warehouseId) {
+        CargoAndWareHouse cargoAndWareHouse = cargoMapper.selectAccountByCargiIdAndWareHouseId(cargoId, warehouseId);
+        return cargoAndWareHouse;
+    }
+
+    @Override
+    public List<Cargo> getCargo(){
+        List<Cargo> allCargo = cargoMapper.getAllCargo();
+        return allCargo;
+    }
+
+    private String getNumber(){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String strDate = sdf.format(date);
+        return "HP" + strDate;
+    }
+
 }
 

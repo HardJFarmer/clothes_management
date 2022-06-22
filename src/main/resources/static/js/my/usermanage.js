@@ -147,8 +147,8 @@ $(document).on("click", ".del-btn", function () {
     if (confirm("确认删除【" + userName + "】吗？")) {
         //确认，发送ajax请求删除
         $.ajax({
-            url: getProjectPath() + "/updateuser?userId=" + userId,
-            type: "GET",
+            url: getProjectPath() + "/updateuser/" + userId,
+            type: "DELETE",
             success: function () {
                 show_user(currentPage);
             }
@@ -157,16 +157,7 @@ $(document).on("click", ".del-btn", function () {
 });
 //条件查询
 $("#search_btn").click(function () {
-    $.ajax({
-        url: getProjectPath() + "/userbyidnamestatus?pageNum=" + currentPage,
-        type: "POST",
-        data:$("#search_form").serialize(),
-        success:function (result) {
-            build_user_table(result);
-            build_page_info(result);
-            build_page_nav(result);
-        }
-    });
+    show_user(currentPage);
 });
 //点击修改密码打开修改员工信息窗口
 $(document).on("click", ".edit-btn", function () {

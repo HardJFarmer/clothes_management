@@ -151,7 +151,7 @@ function build_page_nav(result) {
     //把ul加入到对应位置
     ul.appendTo("#page_nav_area");
 }
-//删除单个user
+//删除单个
 $(document).on("click", ".del-btn", function () {
     //1、弹出是否确认删除对话框
     var cargoNumber = $(this).parents("tr").find("td:eq(2)").text();
@@ -170,16 +170,7 @@ $(document).on("click", ".del-btn", function () {
 });
 //条件查询
 $("#search_btn").click(function () {
-    $.ajax({
-        url: getProjectPath() + "/selectbycargo?pageNum=" + currentPage,
-        type: "POST",
-        data:$("#search_form").serialize(),
-        success:function (result) {
-            build_table(result);
-            build_page_info(result);
-            build_page_nav(result);
-        }
-    });
+    show_cargo(currentPage);
 });
 $(document).on("click", ".edit-btn", function () {
     //清空修改表单样式和内容

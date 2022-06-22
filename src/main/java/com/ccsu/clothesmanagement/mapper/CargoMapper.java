@@ -1,6 +1,7 @@
 package com.ccsu.clothesmanagement.mapper;
 
 import com.ccsu.clothesmanagement.domain.Cargo;
+import com.ccsu.clothesmanagement.domain.CargoAndWareHouse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -48,6 +49,22 @@ public interface CargoMapper {
      */
     List<Cargo> selectCargoAndWareHouseByid(Cargo cargo);
 
-
+    /**
+     * 批量逻辑删除
+     * @param idList id集合
+     * @return
+     */
     int delCargoByList(List<Integer> idList);
+
+    /**
+     * 通过货品id和仓库id号查询对应的货物库存
+     */
+    CargoAndWareHouse selectAccountByCargiIdAndWareHouseId(@Param("cargoId")int cargoId, @Param("warehouseId")int warehouseId);
+
+    /**
+     * 通过货品id和仓库id号修改对应的货物库存
+     */
+    int updateAccountByCargiIdAndWareHouseId(@Param("cargoId")int cargoId,@Param("warehouseId")int warehouseId,@Param("account")int account);
+
+    int addCargoStock(CargoAndWareHouse cargoAndWareHouse);
 }

@@ -73,10 +73,10 @@ function build_page_nav(result) {
     } else {
         //为元素添加点击翻页的事件
         firstPageLi.click(function () {
-            show_cargo(1);
+            show_stock(1);
         });
         prePageLi.click(function () {
-            show_cargo(result.extend.cargoStock.pageNum - 1);
+            show_stock(result.extend.cargoStock.pageNum - 1);
         });
     }
 
@@ -93,10 +93,10 @@ function build_page_nav(result) {
         lastPageLi.addClass("disabled");
     } else {
         nextPageLi.click(function () {
-            show_cargo(result.extend.cargoStock.pageNum + 1);
+            show_stock(result.extend.cargoStock.pageNum + 1);
         });
         lastPageLi.click(function () {
-            show_cargo(result.extend.cargoStock.pages);
+            show_stock(result.extend.cargoStock.pages);
         });
     }
 
@@ -111,7 +111,7 @@ function build_page_nav(result) {
             numLi.addClass("active");
         }
         numLi.click(function () {
-            show_cargo(item);
+            show_stock(item);
         });
         ul.append(numLi);
     });

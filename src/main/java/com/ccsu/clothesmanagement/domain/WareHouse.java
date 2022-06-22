@@ -1,12 +1,14 @@
 package com.ccsu.clothesmanagement.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @ToString
+@NoArgsConstructor
 public class WareHouse {
     private Integer warehouseId;
     private String warehouseName;
@@ -14,9 +16,6 @@ public class WareHouse {
     private Integer warehouseStatus;
     private List<Cargo> cargoList;
     private Integer cargoId;
-
-    public WareHouse() {
-    }
 
     public WareHouse(String warehouseName) {
         this.warehouseName = warehouseName;

@@ -17,13 +17,13 @@
     <select id="selectWareHouseByCondition" resultType="WareHouse">
         select * from warehouse
         <where>
-            warehouse_status=1
             <if test="warehouseId != null and warehouseId !=''">
                and warehouse_id=#{warehouseId}
             </if>
             <if test="warehouseName != null and warehouseName !=''">
                and warehouse_name like CONCAT("%",#{warehouseName},"%")
             </if>
+                and warehouse_status = 1
         </where>
     </select>
 
@@ -87,5 +87,6 @@
             caw.warehouse_id = #{warehouseId}
           AND caw.warehouse_id = w.warehouse_id
           AND c.cargo_id = caw.cargo_id
+          AND caw.account &gt; 0
     </select>
 </mapper>

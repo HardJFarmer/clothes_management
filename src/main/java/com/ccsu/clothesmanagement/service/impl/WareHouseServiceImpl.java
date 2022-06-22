@@ -65,8 +65,24 @@ public class WareHouseServiceImpl implements WareHouseService {
     }
 
     @Override
+    public List<WareHouse> selectWarehouseCargo(WareHouse wareHouse){
+        List<WareHouse> wareHouses = wareHouseMapper.selectCargoAndWareHouseByStepOne(wareHouse.getWarehouseId());
+        return wareHouses;
+    }
+
+    @Override
     public int delCargoByList(List<Integer> ids) {
         int row = wareHouseMapper.delWarehouseByList(ids);
         return row;
+    }
+
+    /**
+     * 不分页查询所有仓库
+     *
+     * @return
+     */
+    @Override
+    public List<WareHouse> selectWareHouses() {
+        return wareHouseMapper.selectWareHouseByCondition(new WareHouse());
     }
 }

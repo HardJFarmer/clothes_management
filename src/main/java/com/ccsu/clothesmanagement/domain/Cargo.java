@@ -1,12 +1,14 @@
 package com.ccsu.clothesmanagement.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
 
 @Data
 @ToString
+@NoArgsConstructor
 public class Cargo {
     private Integer cargoId;
     private String cargoNumber;
@@ -16,9 +18,6 @@ public class Cargo {
     private String  cargoSize;
     private Integer account;
     private List<WareHouse> wareHouseList;
-
-    public Cargo() {
-    }
 
     public Cargo(String cargoNumber, String cargoName, Integer cargoStatus) {
         this.cargoNumber = cargoNumber;

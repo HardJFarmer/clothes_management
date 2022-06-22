@@ -1,6 +1,8 @@
 package com.ccsu.clothesmanagement.controller;
 
 import com.ccsu.clothesmanagement.domain.Cargo;
+import com.ccsu.clothesmanagement.domain.CargoAndWareHouse;
+import com.ccsu.clothesmanagement.domain.WareHouse;
 import com.ccsu.clothesmanagement.entity.Result;
 import com.ccsu.clothesmanagement.service.CargoService;
 import com.github.pagehelper.PageInfo;
@@ -21,18 +23,17 @@ public class CargoController {
         return "/cargo";
     }
 
+    /**
+     * 获取cargolist
+     * @return cargolist集合
+     */
     @GetMapping("/cargo")
     @ResponseBody
-    public Result getAllCargo(Integer pageNum, Integer pageSize){
-        if (pageNum == null) {
-            pageNum = 1;
-        }
-        if (pageSize == null) {
-            pageSize = 8;
-        }
-        PageInfo<Cargo> pageInfo=cargoService.getAllCargo(pageNum,pageSize);
-        return Result.success().add("cargo",pageInfo);
+    public Result getCargo(){
+        List<Cargo> cargos = cargoService.getCargo();
+        return Result.success().add("cargos",cargos);
     }
+
 
     @PostMapping("/addcargo")
     @ResponseBody
@@ -81,6 +82,8 @@ public class CargoController {
         return Result.success().add("cargos",pageInfo);
     }
 
+
+
     @PostMapping("/selectStock")
     @ResponseBody
     public Result getCargoStock(Integer pageNum, Integer pageSize,Cargo cargo){
@@ -94,11 +97,24 @@ public class CargoController {
         return Result.success().add("cargoStock",pageInfo);
     }
 
+
+
     @RequestMapping("/showStock")
     public ModelAndView showStock(Integer cargoId){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("cargoStock");
         modelAndView.addObject("cargoId", cargoId);
         return modelAndView;
+    }
+
+    /**
+     * 根据货品id和仓库id查询数量
+     * @return
+     */
+    @PostMapping("/selectAccount")
+    @ResponseBody
+    public Result selectAccount(Integer cargoId, Integer warehouseId){
+        CargoAndWareHouse cargoAndWareHouse = cargoService.selectAccount(cargoId, warehouseId);
+        return Result.success().add("cargoAndWareHouse", cargoAndWareHouse);
     }
 }
