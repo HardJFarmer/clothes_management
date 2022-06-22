@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper为映射的根节点，namespace指定Dao接口的完整类名 -->
+<mapper namespace="com.ccsu.clothesmanagement.mapper.OrderMapper">
+
+    <sql id="insert">order_number
+    ,order_date,responsible_person,source_company,warehouse_id,judge_status,order_status</sql>
+
+    <!--集合删除-->
+    <update id="delOrderByList" parameterType="list">
+        update orders set order_status = 0 where order_id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--    List<Order> selectOutWareHouseByCondition(Order order);-->
+    <select id="selectWareHouseByCondition" resultType="Order">
+        select * from orders
+        <where>
+            <if test="orderId != null and orderId != ''">
+                order_id=#{orderId}
+            </if>
+            <if test="orderNumber != null and orderNumber != ''">
+                and order_number=#{orderNumber}
+            </if>
+            <if test="orderDate != null and orderDate != ''">
+                and order_date=#{orderDate}
+            </if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">
+                and responsible_person=#{responsiblePerson}
+            </if>
+            <if test="sourceCompany != null and sourceCompany != ''">
+                and source_company=#{sourceCompany}
+            </if>
+        </where>
+    </select>
+
+    <!--    int addOutOrder(Order order);-->
+    <insert id="addOrder">
+        insert into orders(<include refid="insert"></include>)
+        values(#{orderNumber},#{orderDate},#{responsiblePerson},#{sourceCompany},#{warehouseId},#{judgeStatus},1)
+    </insert>
+
+    <!--    int deleteOutOrder(Order order);-->
+    <update id="deleteOrder">
+        update orders
+        set order_status=0
+        where order_id = #{orderId}
+    </update>
+
+    <!--    int updateOutOrder(Order order);-->
+    <update id="updateOrder">
+        update orders
+        <trim prefix="set" suffixOverrides=",">
+            <if test="warehouseId != null and warehouseId != ''">
+                warehouse_id = #{warehouseId},
+            </if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">
+                responsible_person = #{responsiblePerson},
+            </if>
+            <if test="sourceCompany != null and sourceCompany != ''">
+                source_company = #{sourceCompany},
+            </if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <!--    List<Order> selectOutOrderAndWareHouse(Order order);-->
+    <resultMap id="selectOrderAndWareHouse" type="Order">
+        <id property="orderId" column="order_id"></id>
+        <result property="orderNumber" column="order_number"></result>
+        <result property="orderDate" column="order_date"></result>
+        <result property="responsiblePerson" column="responsible_person"></result>
+        <result property="sourceCompany" column="source_company"></result>
+        <association property="wareHouse" javaType="WareHouse">
+            <id property="warehouseId" column="warehouse_id"></id>
+            <result property="warehouseName" column="warehouse_name"></result>
+        </association>
+    </resultMap>
+    <select id="selectOrderAndWareHouse" resultMap="selectOrderAndWareHouse">
+        select * from orders,warehouse
+        <where>
+            <if test="orderId != null and orderId != ''">
+                order_id=#{orderId}
+            </if>
+            <if test="orderNumber != null and orderNumber != ''">
+                and order_number like CONCAT("%",#{orderNumber},"%")
+            </if>
+            <if test="warehouseId != null and warehouseId != ''">
+                and orders.warehouse_id like CONCAT("%",#{warehouseId},"%")
+            </if>
+            <if test="orderDate != null">
+                and order_date=#{orderDate}
+            </if>
+            <if test="responsiblePerson != null and responsiblePerson != ''">
+                and responsible_person like CONCAT("%",#{responsiblePerson},"%")
+            </if>
+            <if test="sourceCompany != null and sourceCompany != ''">
+                and source_company like CONCAT("%",#{sourceCompany},"%")
+            </if>
+            <if test="orderStatus != null">
+                and order_status = #{orderStatus}
+            </if>
+            and orders.warehouse_id=warehouse.warehouse_id
+            and orders.judge_status=#{judgeStatus}
+            and orders.order_status = 1
+        </where>
+    </select>
+
+</mapper>

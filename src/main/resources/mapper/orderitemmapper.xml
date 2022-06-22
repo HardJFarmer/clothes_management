@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper为映射的根节点，namespace指定Dao接口的完整类名 -->
+<mapper namespace="com.ccsu.clothesmanagement.mapper.OrderItemMapper">
+    <!--int addOrderItem(OrderItem orderItem);-->
+    <insert id="addOrderItem">
+        insert into orderitem(cargo_id, change_account, judge_status, orderitem_status, order_id)
+        values (#{cargoId}, #{changeAccount}, #{judgeStatus}, 1, #{orderId})
+    </insert>
+
+    <!--    int deleteOrderItem(OrderItem orderItem);-->
+    <update id="deleteOrderItem">
+        update orderitem
+        set orderitem_status=0
+        where orderitem_id = #{orderitemId}
+    </update>
+
+    <!--    int updateOrderItem(OrderItem orderItem);-->
+    <update id="updateOrderItem">
+        update orderitem
+        <trim prefix="set" suffixOverrides=",">
+            <if test="cargoId != null and cargoId != ''">
+                cargo_id = #{cargoId},
+            </if>
+            <if test="changeAccount != null">
+                change_account = #{changeAccount},
+            </if>
+        </trim>
+        where orderitem_id = #{orderitemId}
+    </update>
+
+    <!--List<OrderItem> selectOrderItemAndCargoAndAccount(OrderItem orderItem);-->
+    <resultMap id="OrderItemAndCargoAndAccount" type="OrderItem">
+        <id property="orderitemId" column="orderitem_id"></id>
+        <result property="changeAccount" column="change_account"></result>
+        <association property="cargo" javaType="Cargo">
+            <id property="cargoId" column="cargo_id"></id>
+            <result property="cargoNumber" column="cargo_number"></result>
+            <result property="cargoName" column="cargo_name"></result>
+            <result property="cargoColor" column="cargo_color"></result>
+            <result property="cargoSize" column="cargo_size"></result>
+        </association>
+    </resultMap>
+
+    <select id="selectOrderItemAndCargoAndAccount" resultMap="OrderItemAndCargoAndAccount">
+        select * from orderitem,cargo
+        <where>
+            <if test="cargoId != null and cargoId != ''">
+                and cargo.cargo_id=#{cargoId}
+            </if>
+            and orderitem.cargo_id=cargo.cargo_id and order_id=#{orderId}
+            and orderitem.orderitem_status = 1
+        </where>
+    </select>
+
+
+    <!--    int selectChangeByOrderItemId(@Param("OrderItemId")int OrderItemId);-->
+    <select id="selectChangeByOrderItemId" resultType="int">
+        select change_account
+        from orderitem
+        where orderitem_id = #{orderitemId}
+    </select>
+
+</mapper>
